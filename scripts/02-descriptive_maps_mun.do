@@ -26,7 +26,7 @@ cd "avances-estudiantes/Daniela Pinto Veizaga - Nayarit/02-data"
 
 * Definimos variable local para obtener la última fecha
 
-local yesterday : display %tdYND date("`c(current_date)'", "DMY") - 1
+local yesterday : display %tdYND date("`c(current_date)'", "DMY") - 3
 
 * Call latest .csv file
 
@@ -57,7 +57,7 @@ gen statemun=entidad_res*1000+municipio_res
 *sort statemun
 cd ".."
 cd "01-input/01-shapefiles"
-save "casos_decesos_mpio.dta", replace
+*save "casos_decesos_mpio.dta", replace
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++
@@ -121,13 +121,13 @@ graph export "decesoscovid_mexico_mun.png", as(png) replace
 spmap deceso using coordmuns if edo==18, id(id)                             ///
 clmethod(custom) clbreaks(0 50 100 200 400 600 1000 1500 2500)              ///
 legtitle("Decesos confirmados")                                             ///
-legend(size(vsmall)) legorder(lohi) legend(position(7))                     ///
 osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)       ///
+legend(size(vsmall)) legorder(lohi) legend(position(7) color(maroon))       ///
 fcolor(Reds)                                                                ///
 label(data(maplabels_mun_nay) xcoord(x_c)  ycoord(y_c)                      ///
-label(NOM_MUN) by(labtype)  size(*0.2 ..) pos(0 0) )                        ///
+label(NOM_MUN) by(labtype)  size(*0.5 ..) pos(0 0) color(maroon))           ///
 fysize(60)                                                                  ///
-fxsize(60)                                         
+fxsize(60)                                          
 graph save "decesoscovid_nayarit_mun.gph",  replace 
 graph export "decesoscovid_nayarit_mun.png", as(png) replace
 
@@ -166,13 +166,13 @@ graph export "casoscovid_mexico_mun.png", as(png) replace
 spmap covid using coordmuns if edo==18, id(id)                              ///
 clmethod(custom) clbreaks(0 50 100 200 400 800 1600 10000 20000)            ///
 legtitle("Casos confirmados")                                               ///
-legend(size(vsmall)) legorder(lohi) legend(position(7))                     ///
 osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)       ///
+legend(size(vsmall)) legorder(lohi) legend(position(7) color(maroon))       ///
 fcolor(Reds)                                                                ///
 label(data(maplabels_mun_nay) xcoord(x_c)  ycoord(y_c)                      ///
-label(NOM_MUN) by(labtype)  size(*0.4 ..) pos(0 0) )                        ///
+label(NOM_MUN) by(labtype)  size(*0.5 ..) pos(0 0) color(maroon))           ///
 fysize(60)                                                                  ///
-fxsize(60)                                                   
+fxsize(60)                                                  
 graph save "casoscovid_nayarit_mun.gph",  replace 
 graph export "casoscovid_nayarit_mun.png", as(png) replace 
 
@@ -196,10 +196,10 @@ graph export "casos_covid_mun.png", as(png) replace
 
 * Casos en México (por cada 10000 habitantes)
 
-spmap covid_pop using coordmuns, id(id)                                     ///
-clmethod(custom) clbreaks(0 10 20 40 80 160 200 250 300)                    ///
-osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)       ///
-fcolor(Reds)                                                                ///
+spmap covid_pop using coordmuns, id(id)                                        ///
+clmethod(custom) clbreaks(0 10 20 40 80 160 200 250 300)                       ///
+osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)          ///
+fcolor(Reds)                                                                   ///
 legenda(off)  
 graph save "casoscovid_mexico_mun_pop.gph", replace
 graph export "casoscovid_mexico_mun_pop.png", as(png) replace
@@ -211,13 +211,13 @@ graph export "casoscovid_mexico_mun_pop.png", as(png) replace
 spmap covid_pop using coordmuns if edo==18, id(id)                          ///
 clmethod(custom) clbreaks(0 10 20 40 80 160 200 250 300)                    ///
 legtitle("Casos confirmados")                                               ///
-legend(size(vsmall)) legorder(lohi) legend(position(7))                     ///
 osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)       ///
+legend(size(vsmall)) legorder(lohi) legend(position(7) color(black))        ///
 fcolor(Reds)                                                                ///
 label(data(maplabels_mun_nay) xcoord(x_c)  ycoord(y_c)                      ///
-label(NOM_MUN) by(labtype)  size(*0.4 ..) pos(0 0) )                        ///
+label(NOM_MUN) by(labtype)  size(*0.5 ..) pos(0 0) )                        ///
 fysize(60)                                                                  ///
-fxsize(60)                                                     
+fxsize(60)   
 graph save "casoscovid_nayarit_mun_pop.gph",  replace 
 graph export "casoscovid_nayarit_mun_pop.png", as(png) replace 
 
@@ -258,12 +258,12 @@ spmap deceso_pop using coordmuns if edo==18, id(id)                         ///
 clmethod(custom) clbreaks(0 2 3 6 9 12 15 30 70)                            ///
 osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)       ///
 legtitle("Decesos confirmados")                                             ///
-legend(size(vsmall)) legorder(lohi) legend(position(7))                     ///
+legend(size(vsmall)) legorder(lohi) legend(position(7) color(black))        ///
 fcolor(Reds)                                                                ///
 label(data(maplabels_mun_nay) xcoord(x_c)  ycoord(y_c)                      ///
-label(NOM_MUN) by(labtype)  size(*0.4 ..) pos(0 0) )                        ///
+label(NOM_MUN) by(labtype)  size(*0.5 ..) pos(0 0) )                        ///
 fysize(60)                                                                  ///
-fxsize(60)                                             
+fxsize(60)                                            
 graph save "decesoscovid_nayarit_mun_pop.gph",  replace 
 graph export "decesoscovid_nayarit_mun_pop.png", as(png) replace
 

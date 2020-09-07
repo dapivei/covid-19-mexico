@@ -26,7 +26,7 @@ cd "avances-estudiantes/Daniela Pinto Veizaga - Nayarit/02-data"
 
 * Definimos variable local para obtener la última fecha
 
-local yesterday : display %tdYND date("`c(current_date)'", "DMY") - 1
+local yesterday : display %tdYND date("`c(current_date)'", "DMY") - 3
 
 * Call latest .csv file
 
@@ -65,10 +65,19 @@ cd "01-input/01-shapefiles"
 
 *shp2dta using 00ent, database(entsmex) ///
 *    coordinates(coordents) genid(id) gencentroids(c) replace
-	
+
+* Nayarit 
+*clear
+*use coordents
+*keep if _ID==18
+*save coordents_nayarit, replace
+
 * Llamamos archivos en formato .dta
+
+
 use entsmex.dta, clear
 destring CVEGEO, gen(entidad_res) force
+
 
 sort entidad_res
 merge 1:1 entidad_res using casos_decesos_ent.dta
@@ -112,13 +121,14 @@ label variable deceso_pop "decesos con covid por cada 10000 habitantes"
 
 * Decesos en México (absolutos)
 
-spmap deceso using coordents, id(id)                                       ///
-clmethod(custom) clbreaks(0 500 1000 2000 4000 6000 10000 15000 20000)     ///
-osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)      ///
-fcolor(Reds)                                                               ///
-label(data(maplabels_ent) xcoord(x_c)  ycoord(y_c)                         ///
-label(NOMGEO) by(labtype)  size(*0.4 ..) pos(0 0) )                        ///
-legenda(off)  
+spmap deceso using coordents, id(id)                                           ///
+clmethod(custom) clbreaks(0 500 1000 2000 4000 6000 10000 15000 20000)         ///
+osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)          ///
+fcolor(Reds)                                                                   ///
+label(data(maplabels_ent) xcoord(x_c)  ycoord(y_c)                             ///
+label(NOMGEO) by(labtype)  size(*0.5 ..) pos(0 0) color(maroon))               ///
+polygon(data("coordents_nayarit.dta") fcolor(none) ocolor(maroon) osize(thin)) ///
+legenda(off)
                                                           
 graph save "decesoscovid_mexico_ent.gph",  replace 
 graph export "decesoscovid_mexico_ent.png", as(png) replace
@@ -126,13 +136,15 @@ graph export "decesoscovid_mexico_ent.png", as(png) replace
 
 * Casos en México (absolutos)
 
-spmap covid using coordents, id(id)                                        ///
-clmethod(custom) clbreaks(0 500 2500 5000 10000 30000 50000 80000 110000)  ///
-osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)      ///
-fcolor(Reds)                                                               ///
-label(data(maplabels_ent) xcoord(x_c)  ycoord(y_c)                         ///
-label(NOMGEO) by(labtype)  size(*0.4 ..) pos(0 0) )                        ///
-legenda(off)  
+spmap covid using coordents, id(id)                                            ///
+clmethod(custom) clbreaks(0 500 2500 5000 10000 30000 50000 80000 110000)      ///
+osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)          ///
+fcolor(Reds)                                                                   ///
+label(data(maplabels_ent) xcoord(x_c)  ycoord(y_c)                             ///
+label(NOMGEO) by(labtype)  size(*0.5 ..) pos(0 0) color(maroon))               ///
+polygon(data("coordents_nayarit.dta") fcolor(none) ocolor(maroon) osize(thin)) ///
+legenda(off)
+                
 
 graph save "casoscovid_mexico_ent.gph", replace
 graph export "casoscovid_mexico_ent.png", as(png) replace
@@ -141,13 +153,15 @@ graph export "casoscovid_mexico_ent.png", as(png) replace
 
 * Decesos en México (ajustado por poblacion)
 
-spmap deceso_pop using coordents, id(id)                                   ///
-clmethod(custom) clbreaks(0 2 3 6 9 12 15 30 70)                           ///
-osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)      ///
-fcolor(Reds)                                                               ///
-label(data(maplabels_ent) xcoord(x_c)  ycoord(y_c)                         ///
-label(NOMGEO) by(labtype)  size(*0.4 ..) pos(0 0) )                        ///
-legenda(off)  
+spmap deceso_pop using coordents, id(id)                                       ///
+clmethod(custom) clbreaks(0 2 3 6 9 12 15 30 70)                               ///
+osize(vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin vvthin)          ///
+fcolor(Reds)                                                                   ///
+label(data(maplabels_ent) xcoord(x_c)  ycoord(y_c)                             ///
+label(NOMGEO) by(labtype)  size(*0.5 ..) pos(0 0))                             ///
+polygon(data("coordents_nayarit.dta") fcolor(none) ocolor(black) osize(thin))  ///
+legenda(off)
+               
                                                           
 graph save "decesoscovid_mexico_ent_pop.gph",  replace 
 graph export "decesoscovid_mexico_ent_pop.png", as(png) replace
@@ -155,13 +169,14 @@ graph export "decesoscovid_mexico_ent_pop.png", as(png) replace
 
 * Casos en México (ajustado por poblacion)
 
-spmap covid_pop using coordents, id(id)                                    ///
-clmethod(custom) clbreaks(0 10 20 40 80 160 200 250 300)                   ///
-osize(vvthin vvthin vvthin vvthin  vvthin  vvthin vvthin vvthin vvthin)    ///
-fcolor(Reds)                                                               ///
-label(data(maplabels_ent) xcoord(x_c)  ycoord(y_c)                         ///
-label(NOMGEO) by(labtype)  size(*0.4 ..) pos(0 0) )                        ///
-legenda(off)      
+spmap covid_pop using coordents, id(id)                                        ///
+clmethod(custom) clbreaks(0 10 20 40 80 160 200 250 300)                       ///
+osize(vvthin vvthin vvthin vvthin  vvthin  vvthin vvthin vvthin vvthin)        ///
+fcolor(Reds)                                                                   ///
+label(data(maplabels_ent) xcoord(x_c)  ycoord(y_c)                             ///
+label(NOMGEO) by(labtype)  size(*0.5 ..) pos(0 0) color(black))                ///
+polygon(data("coordents_nayarit.dta") fcolor(none) ocolor(black) osize(thin))  ///
+legenda(off)     
 graph save "casoscovid_mexico_ent_pop.gph", replace
 graph export "casoscovid_mexico_ent_pop.png", as(png) replace
 
